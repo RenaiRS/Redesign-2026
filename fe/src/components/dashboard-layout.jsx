@@ -4,6 +4,7 @@ import { useAppContext } from "@/context/app-context";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/app-sidebar";
 import { ShieldCheck } from "lucide-react";
+import { OverviewPage } from "./overview-content";
 
 function Breadcrumb({ pathname }) {
   const segments = [
@@ -29,7 +30,8 @@ function Breadcrumb({ pathname }) {
 
 export function DashboardLayout() {
   const location = useLocation();
-  const { games, lastChange } = useAppContext();
+  const { games, logout, lastChange, addGame, updateGame, deleteGame, toggleStatus } = useAppContext();
+  const navigate = useNavigate();
   const mainRef = useRef(null);
 
   const [isDark, setIsDark] = useState(() => {
@@ -67,6 +69,37 @@ export function DashboardLayout() {
     lastChangeRef.current = lastChange;
   }, [lastChange]);
 
+  const goToGames = useCallback(() => navigate("/dashboard/games"), [navigate]);
+
+  const openEdit = useCallback(
+    (id) => {
+      const game = games.find((g) => g.id === id);
+      if (game) {
+        setEditingGame(game);
+        setFormOpen(true);
+      }
+    },
+    [games]
+  );
+
+  const [toast, setToast] = useState(null);
+
+  const showToast = useCallback((message, type = "info") => {
+    setToast({ message, type, id: Date.now() });
+    setTimeout(() => setToast(null), 2500);
+  }, []);
+
+  const handleToggleStatus = useCallback(
+    (id) => {
+      toggleStatus(id);
+      const game = games.find((g) => g.id === id);
+      if (game) {
+        showToast(`"${game.title}" ${game.status === "published" ? "unpublished (→ draft)" : "published"}`, "info");
+      }
+    },
+    [games, toggleStatus, showToast]
+  );
+
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex min-h-svh w-full bg-background">
@@ -91,7 +124,17 @@ export function DashboardLayout() {
           <main ref={mainRef} className="flex-1 p-4 md:p-8 overflow-x-auto">
             <div className="max-w-7xl mx-auto">
               <Routes>
-                <Route index />
+                <Route
+                  index
+                  element={
+                    <OverviewPage
+                      games={games}
+                      onNavigateGames={goToGames}
+                      onEdit={openEdit}
+                      onToggleStatus={handleToggleStatus}
+                    />
+                  }
+                />
 
                 <Route path="games" />
               </Routes>
