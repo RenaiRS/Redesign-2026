@@ -2,9 +2,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useAppContext } from "@/context/app-context";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import AppSidebar from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 import { ShieldCheck } from "lucide-react";
 import { OverviewPage } from "./overview-content";
+import { GamesManagement } from "./game-management";
 
 function Breadcrumb({ pathname }) {
   const segments = [
@@ -100,6 +101,18 @@ export function DashboardLayout() {
     [games, toggleStatus, showToast]
   );
 
+  const startDelete = useCallback(
+    (id) => {
+      setDeleteTarget(games.find((g) => g.id === id));
+    },
+    [games]
+  );
+
+  const openAddNew = useCallback(() => {
+    setEditingGame(null);
+    setFormOpen(true);
+  }, []);
+
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex min-h-svh w-full bg-background">
@@ -136,7 +149,18 @@ export function DashboardLayout() {
                   }
                 />
 
-                <Route path="games" />
+                <Route
+                  path="games"
+                  element={
+                    <GamesManagement
+                      games={games}
+                      onEdit={openEdit}
+                      onDelete={startDelete}
+                      onToggleStatus={handleToggleStatus}
+                      onAdd={openAddNew}
+                    />
+                  }
+                />
               </Routes>
             </div>
 

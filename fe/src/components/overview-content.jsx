@@ -313,7 +313,7 @@ function RecentGames({ games, onNavigateGames, onEdit, onToggleStatus }) {
   );
 }
 
-export default function OverviewPage({ games, onNavigateGames, onEdit, onToggleStatus }) {
+export function OverviewPage({ games, onNavigateGames, onEdit, onToggleStatus }) {
   return (
     <>
       <header className="flex items-center justify-between mb-8">

@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ShieldCheck, LayoutDashboard, Gamepad2, LogOut, Sun, Moon, Hash } from "lucide-react";
 
-export default function AppSidebar({ isDark, toggleDark, onLogout }) {
+export function AppSidebar({ isDark, toggleDark, onLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { games } = useAppContext();
