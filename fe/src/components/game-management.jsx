@@ -82,15 +82,15 @@ function FilterBar({ search, onSearchChange, filters, onFilterChange, gameCount,
       </div>
 
       <Select value={filters.rating || "all"} onValueChange={(v) => onFilterChange("rating", v === "all" ? "" : v)}>
-        <SelectTrigger className="w-27.5 font-mono text-xs">
+        <SelectTrigger className="w-27.5  text-xs">
           <SelectValue placeholder="Rating" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all" className="font-mono text-xs">
+          <SelectItem value="all" className=" text-xs">
             All Ratings
           </SelectItem>
           {RATING_OPTIONS.map((r) => (
-            <SelectItem key={r} value={r} className="font-mono text-xs">
+            <SelectItem key={r} value={r} className=" text-xs">
               {r}
             </SelectItem>
           ))}
@@ -98,15 +98,15 @@ function FilterBar({ search, onSearchChange, filters, onFilterChange, gameCount,
       </Select>
 
       <Select value={filters.platform || "all"} onValueChange={(v) => onFilterChange("platform", v === "all" ? "" : v)}>
-        <SelectTrigger className="w-35 font-mono text-xs">
+        <SelectTrigger className="w-35  text-xs">
           <SelectValue placeholder="Platform" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all" className="font-mono text-xs">
+          <SelectItem value="all" className=" text-xs">
             All Platforms
           </SelectItem>
           {PLATFORM_LIST.map((p) => (
-            <SelectItem key={p} value={p} className="font-mono text-xs">
+            <SelectItem key={p} value={p} className=" text-xs">
               {p}
             </SelectItem>
           ))}
@@ -114,15 +114,15 @@ function FilterBar({ search, onSearchChange, filters, onFilterChange, gameCount,
       </Select>
 
       <Select value={filters.status || "all"} onValueChange={(v) => onFilterChange("status", v === "all" ? "" : v)}>
-        <SelectTrigger className="w-32.5 font-mono text-xs">
+        <SelectTrigger className="w-32.5  text-xs">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all" className="font-mono text-xs">
+          <SelectItem value="all" className=" text-xs">
             All Status
           </SelectItem>
           {STATUS_OPTIONS.map((s) => (
-            <SelectItem key={s.value} value={s.value} className="font-mono text-xs">
+            <SelectItem key={s.value} value={s.value} className=" text-xs">
               {s.label}
             </SelectItem>
           ))}
@@ -130,15 +130,15 @@ function FilterBar({ search, onSearchChange, filters, onFilterChange, gameCount,
       </Select>
 
       {hasActiveFilters && (
-        <Button variant="outline" size="sm" onClick={onClearAll} className="font-mono text-xs shrink-0">
+        <Button variant="outline" size="sm" onClick={onClearAll} className=" text-xs shrink-0">
           <FilterX className="h-3.5 w-3.5 mr-1.5" />
           Clear
         </Button>
       )}
 
-      <div className="font-mono text-[10px] text-muted-foreground tracking-widest whitespace-nowrap shrink-0 hidden md:block">
+      <p className=" text-muted-foreground text-xs whitespace-nowrap shrink-0 hidden md:block">
         {filteredCount} / {gameCount} shown
-      </div>
+      </p>
     </div>
   );
 }
@@ -151,23 +151,17 @@ function GameTable({ games, onEdit, onDelete, onToggleStatus }) {
   }
 
   return (
-    <div className="border border-border">
+    <div className="">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="font-mono text-[10px] uppercase tracking-widest w-8"></TableHead>
-            <TableHead className="font-mono text-[10px] uppercase tracking-widest">Title</TableHead>
-            <TableHead className="font-mono text-[10px] uppercase tracking-widest hidden md:table-cell">
-              Developer
-            </TableHead>
-            <TableHead className="font-mono text-[10px] uppercase tracking-widest">Rating</TableHead>
-            <TableHead className="font-mono text-[10px] uppercase tracking-widest hidden lg:table-cell">
-              Platforms
-            </TableHead>
-            <TableHead className="font-mono text-[10px] uppercase tracking-widest hidden lg:table-cell">
-              Status
-            </TableHead>
-            <TableHead className="font-mono text-[10px] uppercase tracking-widest text-right">Actions</TableHead>
+            <TableHead className=" uppercase tracking-widest w-8"></TableHead>
+            <TableHead className=" uppercase tracking-widest">Title</TableHead>
+            <TableHead className=" uppercase tracking-widest hidden md:table-cell">Developer</TableHead>
+            <TableHead className=" uppercase tracking-widest">Rating</TableHead>
+            <TableHead className=" uppercase tracking-widest hidden lg:table-cell">Platforms</TableHead>
+            <TableHead className=" uppercase tracking-widest hidden lg:table-cell">Status</TableHead>
+            <TableHead className=" uppercase tracking-widest text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -188,12 +182,12 @@ function GameTable({ games, onEdit, onDelete, onToggleStatus }) {
                   <TableCell className="font-medium">
                     <div className="flex flex-col">
                       <span className="font-sans font-bold tracking-tight">{game.title}</span>
-                      <span className="font-mono text-xs text-muted-foreground md:hidden">{game.developer}</span>
+                      <span className=" text-xs text-muted-foreground md:hidden">{game.developer}</span>
                     </div>
                   </TableCell>
 
                   <TableCell className="hidden md:table-cell">
-                    <span className="font-mono text-xs text-muted-foreground">{game.developer}</span>
+                    <span className=" text-xs text-muted-foreground">{game.developer}</span>
                   </TableCell>
 
                   <TableCell>
@@ -207,7 +201,7 @@ function GameTable({ games, onEdit, onDelete, onToggleStatus }) {
                   <TableCell className="hidden lg:table-cell">
                     <Badge
                       variant={game.status === "published" ? "default" : "secondary"}
-                      className="font-mono text-[10px] uppercase tracking-widest"
+                      className=" uppercase tracking-widest"
                     >
                       {game.status}
                     </Badge>
@@ -235,29 +229,28 @@ function GameTable({ games, onEdit, onDelete, onToggleStatus }) {
 
                 {isExpanded && (
                   <TableRow key={`${game.id}-detail`}>
-                    <TableCell colSpan={7} className="bg-muted/30 p-4">
+                    <TableCell colSpan={7} className="bg-muted/30 p-4 rounded-[min(var(--radius-4xl),24px)]">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <CoverImage src={game.coverUrl} className="w-24 aspect-3/4" iconSize="h-6 w-6" />
 
                         <div className="md:col-span-2 space-y-2">
-                          <p className="font-mono text-xs text-muted-foreground">
-                            {game.description || "No description"}
-                          </p>
+                          <p className=" text-xs text-muted-foreground">{game.description || "No description"}</p>
                           <div className="flex flex-wrap gap-1.5 mt-2">
-                            <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
-                              Categories:
-                            </span>
+                            <span className=" text-muted-foreground uppercase tracking-widest">Categories:</span>
                             {game.categories.length > 0 ? (
                               game.categories.map((c) => (
-                                <span key={c} className="font-mono text-[10px] px-1.5 py-0.5 border border-border">
+                                <span
+                                  key={c}
+                                  className=" px-1.5 py-0.5 border border-border rounded-[min(var(--radius-4xl),24px)]"
+                                >
                                   {c}
                                 </span>
                               ))
                             ) : (
-                              <span className="font-mono text-[10px] text-muted-foreground italic">None</span>
+                              <span className=" text-muted-foreground italic">None</span>
                             )}
                           </div>
-                          <div className="flex flex-wrap gap-4 mt-1 font-mono text-[10px] text-muted-foreground">
+                          <div className="flex flex-wrap gap-4 mt-1  text-muted-foreground">
                             <span>Publisher: {game.publisher || "-"}</span>
                             <span>Released: {game.releaseDate || "-"}</span>
                             <span>
@@ -325,7 +318,7 @@ function GamesPage({ games, onEdit, onDelete, onToggleStatus, onAdd }) {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tighter uppercase">Games Management</h1>
-          <p className="font-mono text-xs text-muted-foreground tracking-widest uppercase mt-1">
+          <p className=" text-xs text-muted-foreground tracking-widest uppercase mt-1">
             IGRS Admin Panel — {games.length} game{games.length !== 1 ? "s" : ""}
           </p>
         </div>
@@ -348,18 +341,18 @@ function GamesPage({ games, onEdit, onDelete, onToggleStatus, onAdd }) {
       </div>
 
       <div className="flex items-center justify-between mb-3">
-        <div className="font-mono text-[10px] text-muted-foreground tracking-widest">
+        <div className=" text-muted-foreground tracking-widest">
           {hasActiveFilters ? `Showing ${sorted.length} of ${games.length} games` : `${sorted.length} games`}
         </div>
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] text-muted-foreground tracking-widest">Sort:</span>
+          <span className=" text-muted-foreground tracking-widest">Sort:</span>
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-35 h-8 font-mono text-xs">
+            <SelectTrigger className="w-35 h-8  text-xs">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               {SORT_OPTIONS.map((o) => (
-                <SelectItem key={o.value} value={o.value} className="font-mono text-xs">
+                <SelectItem key={o.value} value={o.value} className=" text-xs">
                   {o.label}
                 </SelectItem>
               ))}
@@ -438,10 +431,10 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
     >
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle className="font-mono text-sm uppercase tracking-widest">
+          <DialogTitle className=" text-sm uppercase tracking-widest">
             {initialData ? "Edit Game" : "Add New Game"}
           </DialogTitle>
-          <DialogDescription className="font-mono text-xs text-muted-foreground">
+          <DialogDescription className=" text-xs text-muted-foreground">
             Fill in the game details below. All asterisk (*) fields are required.
           </DialogDescription>
         </DialogHeader>
@@ -449,7 +442,7 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
         <form onSubmit={handleSubmit} className="space-y-6 pt-2">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label className="font-mono text-xs uppercase tracking-widest">
+              <Label className=" text-xs uppercase tracking-widest">
                 Title <span className="text-destructive">*</span>
               </Label>
               <Input
@@ -458,10 +451,10 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
                 placeholder="e.g. Resident Evil 4"
                 className={errors.title ? "border-destructive" : ""}
               />
-              {errors.title && <p className="font-mono text-[10px] text-destructive">{errors.title}</p>}
+              {errors.title && <p className=" text-destructive">{errors.title}</p>}
             </div>
             <div className="space-y-1.5">
-              <Label className="font-mono text-xs uppercase tracking-widest">
+              <Label className=" text-xs uppercase tracking-widest">
                 Developer <span className="text-destructive">*</span>
               </Label>
               <Input
@@ -470,13 +463,13 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
                 placeholder="e.g. Capcom"
                 className={errors.developer ? "border-destructive" : ""}
               />
-              {errors.developer && <p className="font-mono text-[10px] text-destructive">{errors.developer}</p>}
+              {errors.developer && <p className=" text-destructive">{errors.developer}</p>}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <Label className="font-mono text-xs uppercase tracking-widest">Publisher</Label>
+              <Label className=" text-xs uppercase tracking-widest">Publisher</Label>
               <Input
                 value={form.publisher}
                 onChange={(e) => set("publisher", e.target.value)}
@@ -484,7 +477,7 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
               />
             </div>
             <div className="space-y-1.5">
-              <Label className="font-mono text-xs uppercase tracking-widest">Release Date</Label>
+              <Label className=" text-xs uppercase tracking-widest">Release Date</Label>
               <Input type="date" value={form.releaseDate} onChange={(e) => set("releaseDate", e.target.value)} />
             </div>
           </div>
@@ -493,7 +486,7 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
-              <Label className="font-mono text-xs uppercase tracking-widest">
+              <Label className=" text-xs uppercase tracking-widest">
                 Rating <span className="text-destructive">*</span>
               </Label>
               <div className="grid grid-cols-5 gap-2">
@@ -505,25 +498,25 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
                       type="button"
                       onClick={() => set("rating", r)}
                       className={cn(
-                        "flex flex-col items-center gap-1 p-3 border transition-colors cursor-pointer",
+                        "flex flex-col items-center gap-1 p-3 border transition-colors cursor-pointer rounded-[min(var(--radius-4xl),24px)]",
                         form.rating === r
                           ? "border-foreground bg-foreground text-background"
                           : "border-border hover:border-ring bg-card"
                       )}
                     >
                       <span className="font-bold text-lg tracking-tighter">{r}</span>
-                      <span className="font-mono text-[9px] uppercase tracking-widest text-center leading-tight">
+                      <span className=" text-[9px] uppercase tracking-widest text-center leading-tight">
                         {info?.text || ""}
                       </span>
                     </button>
                   );
                 })}
               </div>
-              {errors.rating && <p className="font-mono text-[10px] text-destructive">{errors.rating}</p>}
+              {errors.rating && <p className=" text-destructive">{errors.rating}</p>}
             </div>
 
             <div className="space-y-1.5">
-              <Label className="font-mono text-xs uppercase tracking-widest">Status</Label>
+              <Label className=" text-xs uppercase tracking-widest">Status</Label>
               <div className="flex gap-2">
                 {STATUS_OPTIONS.map((s) => (
                   <button
@@ -531,7 +524,7 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
                     type="button"
                     onClick={() => set("status", s.value)}
                     className={cn(
-                      "flex-1 py-3 border transition-colors font-mono text-xs uppercase tracking-widest cursor-pointer",
+                      "flex-1 py-3 border transition-colors text-xs uppercase tracking-widest cursor-pointer rounded-[min(var(--radius-4xl),24px)]",
                       form.status === s.value
                         ? "border-foreground bg-foreground text-background"
                         : "border-border hover:border-ring bg-card"
@@ -547,9 +540,7 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
           <div className="border-t border-border" />
 
           <div className="space-y-2">
-            <Label
-              className={cn("font-mono text-xs uppercase tracking-widest", errors.platforms && "text-destructive")}
-            >
+            <Label className={cn(" text-xs uppercase tracking-widest", errors.platforms && "text-destructive")}>
               Platforms <span className="text-destructive">*</span>
             </Label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -557,7 +548,7 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
                 <label
                   key={p}
                   className={cn(
-                    "flex items-center gap-3 px-4 py-3 border cursor-pointer transition-colors",
+                    "flex items-center gap-3 px-4 py-3 border cursor-pointer transition-colors rounded-[min(var(--radius-4xl),24px)]",
                     form.platforms.includes(p)
                       ? "border-foreground bg-foreground text-background"
                       : "border-border hover:border-ring bg-card"
@@ -568,21 +559,21 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
                     onCheckedChange={() => toggleArray("platforms", p)}
                     className="sr-only"
                   />
-                  <span className="font-mono text-xs font-bold">{p}</span>
+                  <span className=" text-xs font-bold">{p}</span>
                 </label>
               ))}
             </div>
-            {errors.platforms && <p className="font-mono text-[10px] text-destructive">{errors.platforms}</p>}
+            {errors.platforms && <p className=" text-destructive">{errors.platforms}</p>}
           </div>
 
           <div className="space-y-2">
-            <Label className="font-mono text-xs uppercase tracking-widest">Content Categories</Label>
+            <Label className=" text-xs uppercase tracking-widest">Content Categories</Label>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
               {CATEGORIES.map((c) => (
                 <label
                   key={c.value}
                   className={cn(
-                    "flex items-start gap-3 cursor-pointer p-3 border transition-colors",
+                    "flex items-start gap-3 cursor-pointer p-3 border transition-colors rounded-[min(var(--radius-4xl),24px)]",
                     form.categories.includes(c.value)
                       ? "border-foreground bg-foreground/5"
                       : "border-border hover:border-ring bg-card"
@@ -594,17 +585,20 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
                     className="mt-0.5"
                   />
                   <div>
-                    <span className="font-mono text-xs font-bold block">{c.label}</span>
-                    <span className="font-mono text-[10px] text-muted-foreground">{c.description}</span>
+                    <span className=" text-xs font-bold block">{c.label}</span>
+                    <span className=" text-muted-foreground">{c.description}</span>
                   </div>
                 </label>
               ))}
             </div>
             {form.categories.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2">
-                <span className="font-mono text-[10px] text-muted-foreground tracking-widest">Selected: </span>
+                <span className=" text-muted-foreground tracking-widest">Selected: </span>
                 {form.categories.map((c) => (
-                  <span key={c} className="font-mono text-[10px] px-1.5 py-0.5 border border-border bg-card">
+                  <span
+                    key={c}
+                    className=" px-1.5 py-0.5 border border-border bg-card rounded-[min(var(--radius-4xl),24px)]"
+                  >
                     {c}
                   </span>
                 ))}
@@ -616,7 +610,7 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2 space-y-1.5">
-              <Label className="font-mono text-xs uppercase tracking-widest">Description</Label>
+              <Label className=" text-xs uppercase tracking-widest">Description</Label>
               <Textarea
                 value={form.description}
                 onChange={(e) => set("description", e.target.value)}
@@ -625,27 +619,22 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
                 className="resize-none"
               />
               <div className="flex justify-between items-center">
-                <p className="font-mono text-[10px] text-muted-foreground">
+                <p className=" text-muted-foreground">
                   {form.description.length > 0
                     ? `${form.description.length} characters`
                     : "Write a compelling description"}
                 </p>
-                <span
-                  className={cn(
-                    "font-mono text-[10px]",
-                    form.description.length > 500 ? "text-destructive" : "text-muted-foreground"
-                  )}
-                >
+                <span className={cn("", form.description.length > 500 ? "text-destructive" : "text-muted-foreground")}>
                   {form.description.length}/500
                 </span>
               </div>
               {form.description.length > 500 && (
-                <p className="font-mono text-[10px] text-destructive">Description too long (max 500 characters)</p>
+                <p className=" text-destructive">Description too long (max 500 characters)</p>
               )}
             </div>
             <div className="space-y-1.5">
-              <Label className="font-mono text-xs uppercase tracking-widest">Cover Preview</Label>
-              <div className="aspect-3/4 border border-border bg-muted overflow-hidden flex items-center justify-center relative">
+              <Label className=" text-xs uppercase tracking-widest">Cover Preview</Label>
+              <div className="aspect-3/4 border border-border bg-muted overflow-hidden rounded-[min(var(--radius-4xl),24px)] flex items-center justify-center relative">
                 {coverPreview ? (
                   <img
                     src={coverPreview}
@@ -658,7 +647,7 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
                 ) : (
                   <div className="flex flex-col items-center gap-2 text-muted-foreground">
                     <Gamepad2 className="h-8 w-8" />
-                    <span className="font-mono text-[9px] text-center px-2">No cover image</span>
+                    <span className=" text-[9px] text-center px-2">No cover image</span>
                   </div>
                 )}
               </div>
@@ -666,24 +655,24 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
           </div>
 
           <div className="space-y-1.5">
-            <Label className="font-mono text-xs uppercase tracking-widest">Cover Image URL</Label>
+            <Label className=" text-xs uppercase tracking-widest">Cover Image URL</Label>
             <Input value={form.coverUrl} onChange={handleCoverChange} placeholder="https://example.com/cover.jpg" />
             {form.coverUrl && (
-              <p className="font-mono text-[10px] text-muted-foreground break-all">
+              <p className=" text-muted-foreground break-all">
                 {coverPreview === form.coverUrl ? "✓ Image loaded" : "Enter valid image URL for preview"}
               </p>
             )}
           </div>
 
           <div className="flex items-center justify-between pt-4 border-t border-border">
-            <div className="font-mono text-[10px] text-muted-foreground">
+            <div className=" text-muted-foreground">
               {form.title ? `Ready to "${form.title}"` : "Fill in the game details"}
             </div>
             <div className="flex items-center gap-3">
-              <Button type="button" variant="outline" onClick={resetAndClose} className="font-mono text-xs">
+              <Button type="button" variant="outline" onClick={resetAndClose} className=" text-xs">
                 Cancel
               </Button>
-              <Button type="submit" className="font-mono text-xs">
+              <Button type="submit" className=" text-xs">
                 {initialData ? "Update Game" : "Add Game"}
               </Button>
             </div>
@@ -704,21 +693,21 @@ function DeleteConfirm({ open, onClose, onConfirm, gameTitle }) {
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="font-mono text-sm uppercase tracking-widest flex items-center gap-2">
+          <AlertDialogTitle className=" text-sm uppercase tracking-widest flex items-center gap-2">
             <Trash2 className="h-4 w-4 text-destructive" />
             Delete Game
           </AlertDialogTitle>
-          <AlertDialogDescription className="font-mono text-xs">
+          <AlertDialogDescription className=" text-xs">
             Are you sure you want to delete <strong>{gameTitle}</strong>?
             <br />
             This action cannot be undone. The game data will be permanently removed.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="font-mono text-xs">Cancel</AlertDialogCancel>
+          <AlertDialogCancel className=" text-xs">Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={onConfirm}
-            className="font-mono text-xs bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            className=" text-xs bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
             Delete
           </AlertDialogAction>

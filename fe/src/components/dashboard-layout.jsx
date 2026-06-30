@@ -2,19 +2,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useAppContext } from "@/context/app-context";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import {
-  ShieldCheck,
-  LogOut,
-  Bell,
-  ChevronDown,
-  RefreshCw,
-  Maximize2,
-  Minimize2,
-  Clock,
-  Terminal,
-  Search,
-} from "lucide-react";
-import { cn, pluralize, countByStatus } from "@/lib/utils";
+import { LogOut, Clock, Search } from "lucide-react";
+import { pluralize, countByStatus } from "@/lib/utils";
 import { RatingBadge } from "@/components/shared/rating-badge";
 import { CoverImage } from "@/components/shared/cover-image";
 import { Input } from "@/components/ui/input";
@@ -32,6 +21,7 @@ import {
 import { AppSidebar } from "@/components/app-sidebar";
 import { OverviewPage } from "@/components/overview-content";
 import { GamesManagement, GameFormModal, DeleteConfirm } from "@/components/game-management";
+import { Toaster, toast } from "sonner";
 
 function Breadcrumb({ pathname }) {
   const segments = [
@@ -44,7 +34,7 @@ function Breadcrumb({ pathname }) {
   ];
 
   return (
-    <nav className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+    <nav className="flex items-center gap-2  text-[10px] uppercase tracking-widest text-muted-foreground">
       {segments.map((s, i) => (
         <span key={i} className="flex items-center gap-2">
           {i > 0 && <span className="text-muted-foreground/30">/</span>}
@@ -69,111 +59,11 @@ function StatusIndicator({ games }) {
   });
 
   return (
-    <div className="relative hidden sm:flex items-center gap-2 font-mono text-[9px] text-muted-foreground tracking-widest uppercase">
+    <div className="relative hidden sm:flex items-center gap-2  text-[9px] text-muted-foreground tracking-widest uppercase">
       <Separator orientation="vertical" />
 
       <Clock className="h-3 w-3" />
       <span>{timeStr}</span>
-    </div>
-  );
-}
-
-function QuickActions({ onLogout }) {
-  const [open, setOpen] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-
-  const toggleFullscreen = useCallback(() => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen?.().catch(() => {});
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen?.().catch(() => {});
-      setIsFullscreen(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    const handler = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener("fullscreenchange", handler);
-    return () => document.removeEventListener("fullscreenchange", handler);
-  }, []);
-
-  const actionItems = [
-    {
-      icon: RefreshCw,
-      label: "Refresh Data",
-      shortcut: "Ctrl+R",
-      action: () => window.location.reload(),
-    },
-    {
-      icon: isFullscreen ? Minimize2 : Maximize2,
-      label: isFullscreen ? "Exit Fullscreen" : "Fullscreen",
-      shortcut: "F11",
-      action: toggleFullscreen,
-    },
-    {
-      icon: Bell,
-      label: "Notifications",
-      shortcut: "",
-      badge: "3",
-      action: () => {},
-    },
-    { divider: true },
-    {
-      icon: LogOut,
-      label: "Logout",
-      shortcut: "",
-      action: onLogout,
-    },
-  ];
-
-  return (
-    <div className="relative">
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 border border-border bg-card hover:bg-muted transition-colors px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground"
-      >
-        <Terminal className="h-3 w-3" />
-        <span className="hidden md:inline">Actions</span>
-        <ChevronDown className="h-2.5 w-2.5" />
-      </button>
-
-      {open && (
-        <>
-          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-full mt-1 z-20 min-w-50 border border-border bg-card shadow-lg">
-            {actionItems.map((item, i) => {
-              if (item.divider) {
-                return <div key={i} className="border-t border-border my-1" />;
-              }
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.label}
-                  onClick={() => {
-                    item.action();
-                    setOpen(false);
-                  }}
-                  className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-muted transition-colors font-mono text-[10px] uppercase tracking-widest text-muted-foreground"
-                >
-                  <span className="flex items-center gap-2">
-                    <Icon className="h-3 w-3" />
-                    {item.label}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    {item.badge && (
-                      <span className="px-1.5 py-0.5 border border-border text-[8px] bg-muted">{item.badge}</span>
-                    )}
-                    {item.shortcut && (
-                      <kbd className="px-1 py-0.5 border border-border text-[8px] bg-muted">{item.shortcut}</kbd>
-                    )}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </>
-      )}
     </div>
   );
 }
@@ -243,8 +133,8 @@ function QuickSearch({ games }) {
             >
               <CoverImage src={game.coverUrl} className="w-7 h-9" iconSize="h-3 w-3" />
               <div className="flex-1 min-w-0">
-                <p className="font-mono text-xs font-medium truncate">{game.title}</p>
-                <p className="font-mono text-[10px] text-muted-foreground truncate">{game.developer}</p>
+                <p className=" text-xs font-medium truncate">{game.title}</p>
+                <p className=" text-[10px] text-muted-foreground truncate">{game.developer}</p>
               </div>
               <RatingBadge rating={game.rating} size="xs" />
             </button>
@@ -253,7 +143,7 @@ function QuickSearch({ games }) {
       )}
       {focused && query && results.length === 0 && (
         <div className="absolute top-full left-0 right-0 mt-1 border border-border bg-card p-3 z-20">
-          <p className="font-mono text-[10px] text-muted-foreground italic text-center">No games found</p>
+          <p className=" text-[10px] text-muted-foreground italic text-center">No games found</p>
         </div>
       )}
     </div>
@@ -286,22 +176,15 @@ export function DashboardLayout() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [logoutConfirm, setLogoutConfirm] = useState(false);
 
-  const [toast, setToast] = useState(null);
-
-  const showToast = useCallback((message, type = "info") => {
-    setToast({ message, type, id: Date.now() });
-    setTimeout(() => setToast(null), 2500);
-  }, []);
-
   const lastChangeRef = useRef(lastChange);
 
   const handleAdd = useCallback(
     (data) => {
       addGame(data);
       setFormOpen(false);
-      showToast("Game added successfully", "success");
+      toast.success("Game added successfully");
     },
-    [addGame, showToast]
+    [addGame]
   );
 
   const handleEdit = useCallback(
@@ -309,18 +192,18 @@ export function DashboardLayout() {
       updateGame(editingGame.id, data);
       setEditingGame(null);
       setFormOpen(false);
-      showToast("Game updated successfully", "success");
+      toast.success("Game updated successfully");
     },
-    [editingGame, updateGame, showToast]
+    [editingGame, updateGame]
   );
 
   const handleDelete = useCallback(() => {
     if (deleteTarget) {
       deleteGame(deleteTarget.id);
       setDeleteTarget(null);
-      showToast(`"${deleteTarget.title}" deleted`, "warning");
+      toast.warning(`"${deleteTarget.title}" deleted`);
     }
-  }, [deleteTarget, deleteGame, showToast]);
+  }, [deleteTarget, deleteGame]);
 
   const openEdit = useCallback(
     (id) => {
@@ -338,10 +221,11 @@ export function DashboardLayout() {
       toggleStatus(id);
       const game = games.find((g) => g.id === id);
       if (game) {
-        showToast(`"${game.title}" ${game.status === "published" ? "unpublished (→ draft)" : "published"}`, "info");
+        const action = game.status === "published" ? "unpublished (→ draft)" : "published";
+        toast.info(`"${game.title}" ${action}`);
       }
     },
-    [games, toggleStatus, showToast]
+    [games, toggleStatus]
   );
 
   const openAddNew = useCallback(() => {
@@ -378,12 +262,6 @@ export function DashboardLayout() {
 
   const goToGames = useCallback(() => navigate("/dashboard/games"), [navigate]);
 
-  const toastColors = {
-    success: "border-accent text-accent bg-accent/5",
-    warning: "border-yellow-500/50 text-yellow-600 dark:text-yellow-400 bg-yellow-500/5",
-    info: "border-border text-foreground bg-card",
-  };
-
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex min-h-svh w-full bg-background">
@@ -394,7 +272,7 @@ export function DashboardLayout() {
             <SidebarTrigger />
 
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              <ShieldCheck className="h-5 w-5 shrink-0 hidden sm:block" style={{ color: "var(--sidebar-primary)" }} />
+             
               <Breadcrumb pathname={location.pathname} />
             </div>
 
@@ -402,7 +280,6 @@ export function DashboardLayout() {
 
             <div className="flex items-center gap-3 shrink-0">
               <StatusIndicator games={games} lastChangeRef={lastChangeRef} />
-              <QuickActions onLogout={handleLogout} />
             </div>
           </header>
 
@@ -437,7 +314,7 @@ export function DashboardLayout() {
             </div>
 
             <footer className="mt-12 pt-6 border-t border-border">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-2 font-mono text-[9px] text-muted-foreground tracking-widest uppercase">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-2  text-[9px] text-muted-foreground tracking-widest uppercase">
                 <span>IGRS Admin Panel v1.0 — Kementerian Komunikasi dan Digital RI</span>
                 <span>
                   {pluralize(games.length, "game")} · {countByStatus(games, "published")} published ·{" "}
@@ -449,21 +326,14 @@ export function DashboardLayout() {
         </SidebarInset>
       </div>
 
-      {toast && (
-        <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-2">
-          <div
-            className={cn(
-              "border px-4 py-3 shadow-lg font-mono text-xs tracking-widest uppercase min-w-50",
-              toastColors[toast.type] || toastColors.info
-            )}
-          >
-            <div className="flex items-center gap-2">
-              {toast.type === "success" && <ShieldCheck className="h-3.5 w-3.5 shrink-0" />}
-              <span>{toast.message}</span>
-            </div>
-          </div>
-        </div>
-      )}
+      <Toaster
+        richColors
+        closeButton
+        position="bottom-right"
+        toastOptions={{
+          className: "text-xs tracking-widest uppercase",
+        }}
+      />
 
       <GameFormModal
         open={formOpen}
@@ -490,21 +360,21 @@ export function DashboardLayout() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className="font-mono text-sm uppercase tracking-widest flex items-center gap-2">
+            <AlertDialogTitle className=" text-sm uppercase tracking-widest flex items-center gap-2">
               <LogOut className="h-4 w-4 text-destructive" />
               Confirm Logout
             </AlertDialogTitle>
-            <AlertDialogDescription className="font-mono text-xs">
+            <AlertDialogDescription className=" text-xs">
               Are you sure you want to log out?
               <br />
               You will need to re-enter your credentials to access the dashboard.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="font-mono text-xs">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className=" text-xs">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmLogout}
-              className="font-mono text-xs bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className=" text-xs bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               Logout
             </AlertDialogAction>

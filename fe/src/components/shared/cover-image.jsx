@@ -6,7 +6,7 @@ export function CoverImage({ src, alt = "", className, iconSize }) {
     return (
       <div
         className={cn(
-          "flex items-center justify-center bg-muted border border-border overflow-hidden shrink-0",
+          "flex items-center justify-center bg-muted border border-border overflow-hidden shrink-0 rounded-md",
           className
         )}
       >
@@ -16,7 +16,7 @@ export function CoverImage({ src, alt = "", className, iconSize }) {
   }
 
   return (
-    <div className={cn("overflow-hidden shrink-0 border border-border bg-muted", className)}>
+    <div className={cn("overflow-hidden shrink-0 border border-border bg-muted rounded-md", className)}>
       <img
         src={src}
         alt={alt}

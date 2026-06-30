@@ -7,14 +7,31 @@ import { RATING_DISPLAY, PLATFORM_LIST } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, PieChart, Pie, Cell, Legend,
-} from 'recharts'
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from "recharts";
 import {
-  GamepadIcon, CircleCheck, FileEdit, BarChart3,
-  Eye, EyeOff, Pencil,
-  Smartphone, Monitor, Globe, Clock,
-} from 'lucide-react'
+  GamepadIcon,
+  CircleCheck,
+  FileEdit,
+  BarChart3,
+  Eye,
+  EyeOff,
+  Pencil,
+  Smartphone,
+  Monitor,
+  Globe,
+  Clock,
+} from "lucide-react";
 
 function StatCards({ games }) {
   const published = countByStatus(games, "published");
@@ -36,7 +53,7 @@ function StatCards({ games }) {
             <s.icon className="h-8 w-8 shrink-0" style={{ color: "var(--sidebar-primary)" }} />
             <div>
               <p className="text-2xl font-bold tracking-tighter">{s.value}</p>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">{s.label}</p>
+              <p className=" text-[10px] uppercase tracking-widest text-muted-foreground">{s.label}</p>
             </div>
           </CardContent>
         </Card>
@@ -62,8 +79,8 @@ function RatingChart({ games }) {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
       <Card>
         <CardHeader>
-          <CardTitle className="font-mono text-xs uppercase tracking-widest">Rating Distribution</CardTitle>
-          <CardDescription className="font-mono text-[10px] text-muted-foreground">
+          <CardTitle className=" text-xs uppercase tracking-widest">Rating Distribution</CardTitle>
+          <CardDescription className=" text-[10px] text-muted-foreground">
             Jumlah game per kategori klasifikasi usia
           </CardDescription>
         </CardHeader>
@@ -87,15 +104,15 @@ function RatingChart({ games }) {
             </ResponsiveContainer>
           ) : (
             <div className="h-75 flex items-center justify-center">
-              <p className="font-mono text-xs text-muted-foreground italic">No data available</p>
+              <p className=" text-xs text-muted-foreground italic">No data available</p>
             </div>
           )}
         </CardContent>
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle className="font-mono text-xs uppercase tracking-widest">Rating Proportions</CardTitle>
-          <CardDescription className="font-mono text-[10px] text-muted-foreground">
+          <CardTitle className=" text-xs uppercase tracking-widest">Rating Proportions</CardTitle>
+          <CardDescription className=" text-[10px] text-muted-foreground">
             Proporsi persentase tiap rating terhadap total
           </CardDescription>
         </CardHeader>
@@ -126,13 +143,13 @@ function RatingChart({ games }) {
                 <Legend
                   verticalAlign="bottom"
                   iconType="rect"
-                  formatter={(value) => <span className="font-mono text-xs text-muted-foreground">{value}</span>}
+                  formatter={(value) => <span className=" text-xs text-muted-foreground">{value}</span>}
                 />
               </PieChart>
             </ResponsiveContainer>
           ) : (
             <div className="h-75 flex items-center justify-center">
-              <p className="font-mono text-xs text-muted-foreground italic">No data available</p>
+              <p className=" text-xs text-muted-foreground italic">No data available</p>
             </div>
           )}
         </CardContent>
@@ -154,11 +171,11 @@ function PlatformChart({ games }) {
   return (
     <Card className="mb-8">
       <CardHeader>
-        <CardTitle className="font-mono text-xs uppercase tracking-widest">
+        <CardTitle className=" text-xs uppercase tracking-widest">
           <Monitor className="h-3.5 w-3.5 inline mr-1.5" />
           Platform Distribution
         </CardTitle>
-        <CardDescription className="font-mono text-[10px] text-muted-foreground">
+        <CardDescription className=" text-[10px] text-muted-foreground">
           Jumlah game yang tersedia di tiap platform
         </CardDescription>
       </CardHeader>
@@ -189,8 +206,8 @@ function PlatformChart({ games }) {
             <div key={d.name} className="flex items-center gap-2 p-2 border border-border bg-card">
               <Smartphone className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
               <div className="flex-1 min-w-0">
-                <p className="font-mono text-[10px] truncate">{d.name}</p>
-                <p className="font-mono text-[9px] text-muted-foreground">
+                <p className=" text-[10px] truncate">{d.name}</p>
+                <p className=" text-[9px] text-muted-foreground">
                   {d.count} game{d.count !== 1 ? "s" : ""}
                 </p>
               </div>
@@ -209,33 +226,34 @@ function RecentGames({ games, onNavigateGames, onEdit, onToggleStatus }) {
 
   return (
     <div className="mb-8">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="font-mono text-xs uppercase tracking-widest text-foreground">
+      <header className="flex items-center justify-between mb-4">
+        <h2 className=" text-xs uppercase tracking-widest text-foreground">
           <Clock className="h-3.5 w-3.5 inline mr-1.5" />
           Recent Games
         </h2>
         <button
           onClick={onNavigateGames}
-          className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground hover:text-accent transition-colors"
+          className=" text-[10px] uppercase tracking-widest text-muted-foreground hover:text-accent transition-colors"
         >
           View All →
         </button>
-      </div>
+      </header>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {recent.map((game) => (
-          <div key={game.id} className="border border-border bg-card p-4 flex items-center gap-4 group">
-            <CoverImage src={game.coverUrl} className="w-12 h-16" iconSize="h-5 w-5" />
-            <div className="flex-1 min-w-0">
+          <Card key={game.id} className="flex-row items-center gap-4 p-0 overflow-visible">
+            <CoverImage src={game.coverUrl} className="w-12 h-16 m-(--card-spacing) me-0" iconSize="h-5 w-5" />
+            <CardContent className="flex-1 min-w-0 p-0">
               <div className="flex items-center gap-2 mb-1">
                 <span className="font-bold tracking-tight text-sm truncate">{game.title}</span>
-                <RatingBadge rating={game.rating} size="xs" className="px-1.5 py-0.5" />
+                <RatingBadge rating={game.rating} size="xs" />
               </div>
-              <p className="font-mono text-[10px] text-muted-foreground truncate mb-2">{game.developer}</p>
+              <p className=" text-[10px] text-muted-foreground truncate mb-2">{game.developer}</p>
 
               <div className="flex items-center gap-2 flex-wrap">
                 <span
                   className={cn(
-                    "font-mono text-[9px] uppercase tracking-widest px-1.5 py-0.5 border",
+                    " text-[9px] uppercase tracking-widest px-1.5 py-0.5 border",
                     game.status === "published" ? "border-accent text-accent" : "border-border text-muted-foreground"
                   )}
                 >
@@ -243,9 +261,9 @@ function RecentGames({ games, onNavigateGames, onEdit, onToggleStatus }) {
                 </span>
                 <PlatformTags platforms={game.platforms} />
               </div>
-            </div>
+            </CardContent>
 
-            <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover/card:opacity-100 transition-opacity me-(--card-spacing)">
               <Button variant="ghost" size="icon-sm" onClick={() => onToggleStatus(game.id)} title="Toggle status">
                 {game.status === "published" ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
               </Button>
@@ -253,7 +271,7 @@ function RecentGames({ games, onNavigateGames, onEdit, onToggleStatus }) {
                 <Pencil className="h-3.5 w-3.5" />
               </Button>
             </div>
-          </div>
+          </Card>
         ))}
       </div>
     </div>
@@ -266,11 +284,11 @@ export function OverviewPage({ games, onNavigateGames, onEdit, onToggleStatus })
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold tracking-tighter uppercase">Overview</h1>
-          <p className="font-mono text-xs text-muted-foreground tracking-widest uppercase mt-1">
+          <p className=" text-xs text-muted-foreground tracking-widest uppercase mt-1">
             IGRS Admin Panel — {pluralize(games.length, "game")} registered
           </p>
         </div>
-        <div className="hidden sm:flex items-center gap-2 font-mono text-[10px] text-muted-foreground tracking-widest uppercase">
+        <div className="hidden sm:flex items-center gap-2  text-[10px] text-muted-foreground tracking-widest uppercase">
           <Globe className="h-3 w-3" />
           <span>
             Last updated:{" "}

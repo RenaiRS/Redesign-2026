@@ -17,7 +17,7 @@ import {
   SidebarSeparator,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { ShieldCheck, LayoutDashboard, Gamepad2, LogOut, Sun, Moon, Clock, Hash } from "lucide-react";
+import { LayoutDashboard, Gamepad2, LogOut, Sun, Moon, Clock, Hash } from "lucide-react";
 import { sortByDate } from "@/lib/utils";
 
 export function AppSidebar({ isDark, toggleDark, onLogout }) {
@@ -41,13 +41,7 @@ export function AppSidebar({ isDark, toggleDark, onLogout }) {
     <Sidebar collapsible="icon" variant="sidebar">
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-3 group-data-[collapsible=icon]:justify-center">
-          <ShieldCheck className="h-6 w-6 shrink-0" style={{ color: "var(--sidebar-primary)" }} />
-          <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-            <span className="font-mono text-xs tracking-widest font-bold uppercase">IGRS Admin</span>
-            <span className="font-mono text-[10px] text-sidebar-foreground/50 tracking-widest uppercase">
-              KOMDIGI RI
-            </span>
-          </div>
+          <img src="/logo.png" alt="logo" className="h-8 group-data-[collapsible=icon]:h-6" />
         </div>
       </SidebarHeader>
 
@@ -55,7 +49,7 @@ export function AppSidebar({ isDark, toggleDark, onLogout }) {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="font-mono text-[10px] tracking-widest uppercase">
+          <SidebarGroupLabel className=" text-[10px] tracking-widest uppercase">
             <Hash className="h-3 w-3 inline mr-1" />
             Navigation
           </SidebarGroupLabel>
@@ -70,9 +64,7 @@ export function AppSidebar({ isDark, toggleDark, onLogout }) {
                   >
                     <item.icon className="h-4 w-4" />
                     <span>{item.label}</span>
-                    {item.badge !== null && (
-                      <SidebarMenuBadge className="font-mono text-[10px]">{item.badge}</SidebarMenuBadge>
-                    )}
+                    {item.badge !== null && <SidebarMenuBadge className=" text-[10px]">{item.badge}</SidebarMenuBadge>}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -84,7 +76,7 @@ export function AppSidebar({ isDark, toggleDark, onLogout }) {
 
         {recentGames.length > 0 && (
           <SidebarGroup>
-            <SidebarGroupLabel className="font-mono text-[10px] tracking-widest uppercase">
+            <SidebarGroupLabel className=" text-[10px] tracking-widest uppercase">
               <Clock className="h-3 w-3 inline mr-1" />
               Recent Games
             </SidebarGroupLabel>
@@ -103,10 +95,10 @@ export function AppSidebar({ isDark, toggleDark, onLogout }) {
                       iconSize="h-3 w-3"
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="font-mono text-[10px] font-medium truncate text-sidebar-foreground">{game.title}</p>
+                      <p className=" text-[10px] font-medium truncate text-sidebar-foreground">{game.title}</p>
                       <div className="flex items-center gap-1.5 mt-0.5">
                         <RatingBadge rating={game.rating} size="xs" className="text-sidebar-foreground/40" />
-                        <span className="font-mono text-[8px] text-sidebar-foreground/40 uppercase tracking-widest">
+                        <span className=" text-[8px] text-sidebar-foreground/40 uppercase tracking-widest">
                           {game.status}
                         </span>
                       </div>
