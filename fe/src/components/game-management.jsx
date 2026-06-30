@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { useAppContext } from "@/context/app-context";
-import { RATING_DISPLAY, RATING_OPTIONS, PLATFORM_LIST, CATEGORIES, STATUS_OPTIONS } from "@/lib/constants";
+import { RATING_OPTIONS, PLATFORM_LIST, CATEGORIES, STATUS_OPTIONS, RATING_DISPLAY } from "@/lib/constants";
+import { RatingBadge } from "@/components/shared/rating-badge";
+import { CoverImage } from "@/components/shared/cover-image";
+import { PlatformTags } from "@/components/shared/platform-tags";
+import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,12 +36,8 @@ import {
   FilterX,
   ChevronDown,
   ChevronUp,
-  ArrowUpDown,
-  SortAsc,
-  SortDesc,
 } from "lucide-react";
 
-/* ─── Constants ─── */
 const EMPTY_FORM = {
   title: "",
   developer: "",
@@ -59,13 +58,11 @@ const SORT_OPTIONS = [
   { label: "Title Z-A", value: "title-desc" },
 ];
 
-/* ─── FilterBar — Search + Filter Controls ─── */
 function FilterBar({ search, onSearchChange, filters, onFilterChange, gameCount, filteredCount, onClearAll }) {
   const hasActiveFilters = filters.rating || filters.platform || filters.status || search.trim();
 
   return (
     <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-end">
-      {/* Search */}
       <div className="relative flex-1 w-full">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
@@ -84,9 +81,8 @@ function FilterBar({ search, onSearchChange, filters, onFilterChange, gameCount,
         )}
       </div>
 
-      {/* Rating Filter */}
       <Select value={filters.rating || "all"} onValueChange={(v) => onFilterChange("rating", v === "all" ? "" : v)}>
-        <SelectTrigger className="w-[110px] font-mono text-xs">
+        <SelectTrigger className="w-27.5 font-mono text-xs">
           <SelectValue placeholder="Rating" />
         </SelectTrigger>
         <SelectContent>
@@ -101,9 +97,8 @@ function FilterBar({ search, onSearchChange, filters, onFilterChange, gameCount,
         </SelectContent>
       </Select>
 
-      {/* Platform Filter */}
       <Select value={filters.platform || "all"} onValueChange={(v) => onFilterChange("platform", v === "all" ? "" : v)}>
-        <SelectTrigger className="w-[140px] font-mono text-xs">
+        <SelectTrigger className="w-35 font-mono text-xs">
           <SelectValue placeholder="Platform" />
         </SelectTrigger>
         <SelectContent>
@@ -118,9 +113,8 @@ function FilterBar({ search, onSearchChange, filters, onFilterChange, gameCount,
         </SelectContent>
       </Select>
 
-      {/* Status Filter */}
       <Select value={filters.status || "all"} onValueChange={(v) => onFilterChange("status", v === "all" ? "" : v)}>
-        <SelectTrigger className="w-[130px] font-mono text-xs">
+        <SelectTrigger className="w-32.5 font-mono text-xs">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
@@ -135,7 +129,6 @@ function FilterBar({ search, onSearchChange, filters, onFilterChange, gameCount,
         </SelectContent>
       </Select>
 
-      {/* Clear Filters */}
       {hasActiveFilters && (
         <Button variant="outline" size="sm" onClick={onClearAll} className="font-mono text-xs shrink-0">
           <FilterX className="h-3.5 w-3.5 mr-1.5" />
@@ -143,7 +136,6 @@ function FilterBar({ search, onSearchChange, filters, onFilterChange, gameCount,
         </Button>
       )}
 
-      {/* Count display */}
       <div className="font-mono text-[10px] text-muted-foreground tracking-widest whitespace-nowrap shrink-0 hidden md:block">
         {filteredCount} / {gameCount} shown
       </div>
@@ -151,20 +143,11 @@ function FilterBar({ search, onSearchChange, filters, onFilterChange, gameCount,
   );
 }
 
-/* ─── Game Table Rows ─── */
 function GameTable({ games, onEdit, onDelete, onToggleStatus }) {
   const [expandedRow, setExpandedRow] = useState(null);
 
   if (!games.length) {
-    return (
-      <div className="border border-border p-12 text-center">
-        <Gamepad2 className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
-        <p className="font-mono text-sm text-muted-foreground">No games match your search.</p>
-        <p className="font-mono text-[10px] text-muted-foreground mt-2 tracking-widest uppercase">
-          Try adjusting filters or add a new game
-        </p>
-      </div>
-    );
+    return <EmptyState title="No games match your search." description="Try adjusting filters or add a new game" />;
   }
 
   return (
@@ -189,12 +172,10 @@ function GameTable({ games, onEdit, onDelete, onToggleStatus }) {
         </TableHeader>
         <TableBody>
           {games.map((game) => {
-            const ratingInfo = RATING_DISPLAY.find((r) => r.rating === game.rating);
             const isExpanded = expandedRow === game.id;
             return (
               <>
                 <TableRow key={game.id} className="group">
-                  {/* Expand toggle */}
                   <TableCell className="p-2">
                     <button
                       onClick={() => setExpandedRow(isExpanded ? null : game.id)}
@@ -204,7 +185,6 @@ function GameTable({ games, onEdit, onDelete, onToggleStatus }) {
                     </button>
                   </TableCell>
 
-                  {/* Title + developer mobile */}
                   <TableCell className="font-medium">
                     <div className="flex flex-col">
                       <span className="font-sans font-bold tracking-tight">{game.title}</span>
@@ -217,24 +197,11 @@ function GameTable({ games, onEdit, onDelete, onToggleStatus }) {
                   </TableCell>
 
                   <TableCell>
-                    <span
-                      className={cn("font-mono text-xs font-bold px-2 py-1 border", ratingInfo?.color, ratingInfo?.bg)}
-                    >
-                      {game.rating}
-                    </span>
+                    <RatingBadge rating={game.rating} size="sm" />
                   </TableCell>
 
                   <TableCell className="hidden lg:table-cell">
-                    <div className="flex flex-wrap gap-1">
-                      {game.platforms.slice(0, 2).map((p) => (
-                        <span key={p} className="font-mono text-[9px] text-muted-foreground uppercase tracking-widest">
-                          {p}
-                        </span>
-                      ))}
-                      {game.platforms.length > 2 && (
-                        <span className="font-mono text-[9px] text-muted-foreground">+{game.platforms.length - 2}</span>
-                      )}
-                    </div>
+                    <PlatformTags platforms={game.platforms} max={2} />
                   </TableCell>
 
                   <TableCell className="hidden lg:table-cell">
@@ -266,21 +233,12 @@ function GameTable({ games, onEdit, onDelete, onToggleStatus }) {
                   </TableCell>
                 </TableRow>
 
-                {/* Expanded detail row */}
                 {isExpanded && (
                   <TableRow key={`${game.id}-detail`}>
                     <TableCell colSpan={7} className="bg-muted/30 p-4">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {/* Cover preview */}
-                        <div className="w-24 aspect-[3/4] border border-border bg-muted overflow-hidden flex items-center justify-center">
-                          {game.coverUrl ? (
-                            <img src={game.coverUrl} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            <Gamepad2 className="h-6 w-6 text-muted-foreground" />
-                          )}
-                        </div>
+                        <CoverImage src={game.coverUrl} className="w-24 aspect-3/4" iconSize="h-6 w-6" />
 
-                        {/* Detail info */}
                         <div className="md:col-span-2 space-y-2">
                           <p className="font-mono text-xs text-muted-foreground">
                             {game.description || "No description"}
@@ -320,7 +278,6 @@ function GameTable({ games, onEdit, onDelete, onToggleStatus }) {
   );
 }
 
-/* ─── Games Page ─── */
 function GamesPage({ games, onEdit, onDelete, onToggleStatus, onAdd }) {
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({ rating: "", platform: "", status: "" });
@@ -337,7 +294,6 @@ function GamesPage({ games, onEdit, onDelete, onToggleStatus, onAdd }) {
 
   const hasActiveFilters = filters.rating || filters.platform || filters.status || search.trim();
 
-  // Filter logic
   const filtered = games.filter((g) => {
     if (search.trim()) {
       const q = search.toLowerCase();
@@ -349,7 +305,6 @@ function GamesPage({ games, onEdit, onDelete, onToggleStatus, onAdd }) {
     return true;
   });
 
-  // Sort logic
   const sorted = [...filtered].sort((a, b) => {
     switch (sortBy) {
       case "newest":
@@ -367,7 +322,6 @@ function GamesPage({ games, onEdit, onDelete, onToggleStatus, onAdd }) {
 
   return (
     <>
-      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tighter uppercase">Games Management</h1>
@@ -381,7 +335,6 @@ function GamesPage({ games, onEdit, onDelete, onToggleStatus, onAdd }) {
         </Button>
       </div>
 
-      {/* Filters */}
       <div className="mb-4">
         <FilterBar
           search={search}
@@ -394,7 +347,6 @@ function GamesPage({ games, onEdit, onDelete, onToggleStatus, onAdd }) {
         />
       </div>
 
-      {/* Sort + Result count */}
       <div className="flex items-center justify-between mb-3">
         <div className="font-mono text-[10px] text-muted-foreground tracking-widest">
           {hasActiveFilters ? `Showing ${sorted.length} of ${games.length} games` : `${sorted.length} games`}
@@ -402,7 +354,7 @@ function GamesPage({ games, onEdit, onDelete, onToggleStatus, onAdd }) {
         <div className="flex items-center gap-2">
           <span className="font-mono text-[10px] text-muted-foreground tracking-widest">Sort:</span>
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[140px] h-8 font-mono text-xs">
+            <SelectTrigger className="w-35 h-8 font-mono text-xs">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -416,19 +368,16 @@ function GamesPage({ games, onEdit, onDelete, onToggleStatus, onAdd }) {
         </div>
       </div>
 
-      {/* Table */}
       <GameTable games={sorted} onEdit={onEdit} onDelete={onDelete} onToggleStatus={onToggleStatus} />
     </>
   );
 }
 
-/* ─── Game Form Modal ─── */
 function GameFormModal({ open, onClose, onSubmit, initialData }) {
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [errors, setErrors] = useState({});
   const [coverPreview, setCoverPreview] = useState("");
 
-  // Sync form state setiap dialog dibuka — fix stale state saat edit vs add
   useEffect(() => {
     if (open) {
       setForm(initialData ? { ...EMPTY_FORM, ...initialData } : { ...EMPTY_FORM });
@@ -498,7 +447,6 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6 pt-2">
-          {/* ─── Row: Title + Developer ─── */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label className="font-mono text-xs uppercase tracking-widest">
@@ -526,7 +474,6 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
             </div>
           </div>
 
-          {/* ─── Row: Publisher + Release Date ─── */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label className="font-mono text-xs uppercase tracking-widest">Publisher</Label>
@@ -542,10 +489,8 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
             </div>
           </div>
 
-          {/* ─── Divider ─── */}
           <div className="border-t border-border" />
 
-          {/* ─── Rating + Status side-by-side ─── */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
               <Label className="font-mono text-xs uppercase tracking-widest">
@@ -599,10 +544,8 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
             </div>
           </div>
 
-          {/* ─── Divider ─── */}
           <div className="border-t border-border" />
 
-          {/* ─── Platforms ─── */}
           <div className="space-y-2">
             <Label
               className={cn("font-mono text-xs uppercase tracking-widest", errors.platforms && "text-destructive")}
@@ -632,7 +575,6 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
             {errors.platforms && <p className="font-mono text-[10px] text-destructive">{errors.platforms}</p>}
           </div>
 
-          {/* ─── Categories ─── */}
           <div className="space-y-2">
             <Label className="font-mono text-xs uppercase tracking-widest">Content Categories</Label>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -670,10 +612,8 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
             )}
           </div>
 
-          {/* ─── Divider ─── */}
           <div className="border-t border-border" />
 
-          {/* ─── Description + Cover Preview ─── */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-2 space-y-1.5">
               <Label className="font-mono text-xs uppercase tracking-widest">Description</Label>
@@ -705,7 +645,7 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
             </div>
             <div className="space-y-1.5">
               <Label className="font-mono text-xs uppercase tracking-widest">Cover Preview</Label>
-              <div className="aspect-[3/4] border border-border bg-muted overflow-hidden flex items-center justify-center relative">
+              <div className="aspect-3/4 border border-border bg-muted overflow-hidden flex items-center justify-center relative">
                 {coverPreview ? (
                   <img
                     src={coverPreview}
@@ -725,7 +665,6 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
             </div>
           </div>
 
-          {/* ─── Cover URL ─── */}
           <div className="space-y-1.5">
             <Label className="font-mono text-xs uppercase tracking-widest">Cover Image URL</Label>
             <Input value={form.coverUrl} onChange={handleCoverChange} placeholder="https://example.com/cover.jpg" />
@@ -736,7 +675,6 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
             )}
           </div>
 
-          {/* ─── Actions ─── */}
           <div className="flex items-center justify-between pt-4 border-t border-border">
             <div className="font-mono text-[10px] text-muted-foreground">
               {form.title ? `Ready to "${form.title}"` : "Fill in the game details"}
@@ -756,7 +694,6 @@ function GameFormModal({ open, onClose, onSubmit, initialData }) {
   );
 }
 
-/* ─── Delete Confirmation ─── */
 function DeleteConfirm({ open, onClose, onConfirm, gameTitle }) {
   return (
     <AlertDialog
@@ -791,21 +728,6 @@ function DeleteConfirm({ open, onClose, onConfirm, gameTitle }) {
   );
 }
 
-/* ─── Export wrapper — menggabungkan semua state games page + modal ─── */
-
-/**
- * GamesManagement — organisme lengkap untuk halaman /dashboard/games.
- *
- * Meng-handle:
- * - Filter & search interaktif (search, rating, platform, status)
- * - Sorting (newest, oldest, A-Z, Z-A)
- * - Tabel dengan expandable detail row
- * - Add/Edit game via modal form (multi-section tabs)
- * - Delete konfirmasi
- * - Toggle status cepat
- *
- * @param {{ games: import('@/context/app-context').Game[], onEdit: (id: string) => void, onDelete: (id: string) => void, onToggleStatus: (id: string) => void, onAdd: () => void }} props
- */
 export function GamesManagement({ games, onEdit, onDelete, onToggleStatus, onAdd }) {
   return <GamesPage games={games} onEdit={onEdit} onDelete={onDelete} onToggleStatus={onToggleStatus} onAdd={onAdd} />;
 }

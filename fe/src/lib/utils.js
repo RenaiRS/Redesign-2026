@@ -22,3 +22,18 @@ export function formatDate(dateStr, options = {}) {
 export function nowISO() {
   return new Date().toISOString();
 }
+
+export function pluralize(count, singular, plural) {
+  return `${count} ${count === 1 ? singular : (plural || `${singular}s`)}`;
+}
+
+export function sortByDate(items, field = "createdAt", order = "desc") {
+  return [...items].sort((a, b) => {
+    const diff = new Date(b[field]) - new Date(a[field]);
+    return order === "asc" ? -diff : diff;
+  });
+}
+
+export function countByStatus(games, status) {
+  return games.filter((g) => g.status === status).length;
+}
