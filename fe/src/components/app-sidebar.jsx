@@ -41,7 +41,7 @@ export function AppSidebar({ isDark, toggleDark, onLogout }) {
     <Sidebar collapsible="icon" variant="sidebar">
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-3 group-data-[collapsible=icon]:justify-center">
-          <img src="/logo.png" alt="logo" className="h-8 group-data-[collapsible=icon]:h-6" />
+          <img src="/images/icons/igrs-logo logo.svg" alt="logo" className="h-8 group-data-[collapsible=icon]:h-6" />
         </div>
       </SidebarHeader>
 
